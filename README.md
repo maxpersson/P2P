@@ -7,6 +7,6 @@ npm install
 ## Start
 node piServer.js
 
-interface: go to address http://<ip>:8081
+interface: go to address http://<<ip>>:8081
 
 to add more leds fix resources.json
