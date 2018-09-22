@@ -1,10 +1,10 @@
 # P2P
 Milestones for p2p course
 
-##Setup
+## Setup
 npm install
 
-##Start
+## Start
 node piServer.js
 
 interface: go to address http://<ip>:8081
