@@ -1,0 +1,27 @@
+{
+  "name": "api_iot",
+  "version": "1.0.0",
+  "description": "excersize creating api for sensors and actuators located on raspberry pi server",
+  "main": "piServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Max persson",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "onoff": "^3.2.1",
+    "bl": "^1.0.0",
+    "body-parser": "^1.13.1",
+    "coap": "^0.20.0",
+    "cors": "^2.7.1",
+    "msgpack5": "^3.3.0",
+    "node-json2html": "^1.0.0",
+    "ws": "^0.7.2",
+    "watchjs": "^0.0.0"
+  },
+  "optionalDependencies": {
+    "node-dht-sensor": "^0.0.8"
+  }
+
+}

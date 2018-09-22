@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script language="JavaScript" type="text/javascript">
+        function subscribeToWs(url, msg) {
+            var socket = new WebSocket(url);
+
+            socket.onmessage = function (event) {
+                var JSONOb = JSON.parse(event.data);
+                console.log('edced' +JSON.stringify(JSONOb));
+                switch (JSONOb.name) {
+                    case "Temperature Sensor":
+                        document.getElementById('showTemp').innerText = JSONOb.value;
+                        break
+                    case "Humidity Sensor":
+                        document.getElementById('showHum').innerText = JSONOb.value;
+                        break
+                    case "Passive Infrared":
+                        document.getElementById('showPir').innerText = JSONOb.value;
+                        break
+                }
+
+            };
+            socket.onerror = function (error) {
+                console.log('An error occurred while trying to connect to a Websocket!');
+                console.log(error);
+            };
+            socket.onopen = function (event) {
+                if (msg) {
+                    socket.send(msg);
+                }
+            };
+        }
+        //subscribeToWs('ws://localhost:8484/pi/sensors/temperature');
+        //subscribeToWs('ws://localhost:8484/things/coapDevice/sensors/co2');
+        subscribeToWs('ws://192.168.1.96:8081/pi/sensors/pir');
+        subscribeToWs('ws://192.168.1.96:8081/pi/sensors/temperature');
+        subscribeToWs('ws://192.168.1.96:8081/pi/sensors/humidity');
+
+        function toggle(button, id)
+        {
+            if(document.getElementById(id).value=="OFF") {
+                document.getElementById(id).value = "ON";
+                sendRequest('{"value":false}', id)
+            }
+
+            else if(document.getElementById(id).value=="ON") {
+                document.getElementById(id).value = "OFF";
+                sendRequest('{"value":true}', id)
+            }
+        }
+        function createLedButtons() {
+
+            var xobj = new XMLHttpRequest();
+            xobj.overrideMimeType("application/json");
+            xobj.open('GET', '/res/model', true); // Replace 'my_data' with the path to your file
+            xobj.onreadystatechange = function () {
+                if (xobj.readyState == 4 && xobj.status == "200") {
+                    // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                    var actual_JSON = JSON.parse(xobj.responseText);
+                    $(document).ready(function(){
+                    for (led in actual_JSON.pi.actuators.leds){
+                        let ledCount = JSON.stringify(led);
+
+                            $("<input type='button'>").attr({
+                                "value": "OFF",
+                                "id": led,
+                                "onclick": "toggle(this," + led +")"
+                            }
+                            ).appendTo($("#ledSwitches"))
+
+                        console.log(JSON.stringify(led))
+
+                    }
+                    });
+                }
+            };
+            xobj.send(null);
+        }
+
+        createLedButtons()
+
+        function sendRequest(state, id) {
+            const Http = new XMLHttpRequest();
+            const url= 'http://192.168.1.96:8081/pi/actuators/leds/' + id;
+            Http.open("PUT", url, true);
+            Http.setRequestHeader('Content-type','application/json' );
+            Http.setRequestHeader('Accept', 'application/json');
+            Http.send(state);
+
+            Http.onreadystatechange=(e)=>{
+                console.log(Http.responseText)
+            }
+        }
+
+
+
+        //subscribeToWs('ws://wot-pi.local:8484/pi/sensors/pir');
+    </script>
+</head>
+<body>
+
+<p id="showHum"></p>
+<p id="showPir"></p>
+<p id="showTemp"></p>
+<form action="" id="ledSwitches">
+</form></body></html>
+</body></html>
