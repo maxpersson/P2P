@@ -4,6 +4,7 @@
   "description": "excersize creating api for sensors and actuators located on raspberry pi server",
   "main": "piServer.js",
   "scripts": {
+    "start": "node piServer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Max persson",
